@@ -61,15 +61,15 @@ namespace BlockFirmwareWriter
 
         private void 実行テストTToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Execute(checkIsWorking: true);
+            Execute(showMessage: true, checkOnlyExeWorks: true);
         }
 
         private void 単体実行EToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenCmd();
+            OpenCmd(openPromptOnly: true);
         }
 
-        private void OpenCmd()
+        private void OpenCmd(string _args = "", bool pause = true, bool openPromptOnly = false)
         {
             if (!File.Exists(tbExePath.Text))
             {
@@ -77,86 +77,86 @@ namespace BlockFirmwareWriter
                 return;
             }
 
-            var exePath = Environment.GetEnvironmentVariable("ComSpec");
+            var p = new Process();
+            p.StartInfo.FileName = Environment.GetEnvironmentVariable("ComSpec");
             var avrdudePath = Path.GetDirectoryName(tbExePath.Text);
-            var args = "/k cd \"" + avrdudePath + "\"";
-            Process.Start(exePath, args);
+            var args = (openPromptOnly || pause) ? "/K " : "/C ";
+            args += "cd \"" + avrdudePath + "\"";
+            if (!openPromptOnly)
+            {
+                args += " .\\avrdude.exe -c usbasp -p t85 ";
+                if (File.Exists(tbConfPath.Text))
+                {
+                    args += $" -C \"{tbConfPath.Text}\" ";
+                }
+                args += _args;
+            }
+
+            p.StartInfo.Arguments = args;
+            p.Start();
         }
 
-        private void Execute(string args = "", bool outputDebug = false, bool checkIsWorking = false, bool openCmd = false)
+        private bool Execute(string args = "", bool showMessage = false, bool checkOnlyExeWorks = false)
         {
             if (!File.Exists(tbExePath.Text))
             {
                 MessageBox.Show("avrdudeのパスを設定してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
 
+            if (!checkOnlyExeWorks)
+            {
+                args += " -c usbasp -p t85";
+            }
             if (File.Exists(tbConfPath.Text))
             {
                 args += $" -C \"{tbConfPath.Text}\"";
             }
 
-            var ret = new Process();
-            var exePath = tbExePath.Text;
-            if (openCmd)
+            var p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.FileName = tbExePath.Text;
+            p.StartInfo.Arguments = args;
+            p.Start();
+
+            string stderr = p.StandardError.ReadToEnd();
+            p.WaitForExit();
+
+            bool ret = (p.ExitCode == 0);
+
+            if (checkOnlyExeWorks)
             {
-                exePath = Environment.GetEnvironmentVariable("ComSpec");
-                var avrdudePath = Path.GetDirectoryName(tbExePath.Text);
-                args = "/k cd \"" + avrdudePath + "\" && .\\avrdude.exe " + args;
-            }
-            if (outputDebug)
-            {
-                var msgbox_ret = MessageBox.Show($"cmd: {exePath}\r\nargs: {args}", this.Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-                if (msgbox_ret == DialogResult.Cancel)
-                {
-                    return;
-                }
-            }
-            if (checkIsWorking)
-            {
-                ret.StartInfo.UseShellExecute = false;
-                ret.StartInfo.RedirectStandardOutput = true;
-                ret.StartInfo.RedirectStandardError = true;
+                string expectedErrorMsg = @"avrdude.exe: no programmer has been specified on the command line or the config file";
+                string actual = stderr.Trim().Split('\n')[0].Trim();
+                ret |= (actual == expectedErrorMsg);
             }
 
-            ret.StartInfo.FileName = exePath;
-            ret.StartInfo.Arguments = args;
-            ret.Start();
-
-            if (checkIsWorking)
+            if (showMessage)
             {
-                ret.WaitForExit();
-                string stderr = ret.StandardError.ReadToEnd();
-
-                if (ret.ExitCode != 0)
-                {
-                    // 期待されるエラーメッセージ (1行目)
-                    string expectedErrorMsg = @"avrdude.exe: no programmer has been specified on the command line or the config file";
-                    string actual = stderr.Trim().Split('\n')[0].Trim();
-                    if (actual == expectedErrorMsg)
-                    {
-                        MessageBox.Show("avrdudeの実行に成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
-                    MessageBox.Show("avrdudeの実行に失敗しました。設定を確認してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
+                if (ret)
                 {
                     MessageBox.Show("avrdudeの実行に成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                else
+                {
+                    MessageBox.Show("avrdudeの実行に失敗しました。設定を確認してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
+            return ret;
         }
 
         private void BtnWriteLfuse_Click(object sender, EventArgs e)
         {
-            var args = @"-c usbasp -p t85";
-            Execute(outputDebug: true, openCmd: true, args: args);
+            
         }
 
         private void ATtiny85テストAToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (checkATtiny85Connection())
+            if (Execute())
             {
                 MessageBox.Show("ATtiny85への接続が成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -165,31 +165,6 @@ namespace BlockFirmwareWriter
                 MessageBox.Show("ATtiny85への接続が失敗しました。avrdudeのパスとUSBaspの接続等を確認してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-        }
-
-        private bool checkATtiny85Connection()
-        {
-            if (!File.Exists(tbExePath.Text))
-            {
-                return false;
-            }
-
-            var args = "-c usbasp -p t85";
-            if (File.Exists(tbConfPath.Text))
-            {
-                args += $" -C \"{tbConfPath.Text}\"";
-            }
-
-            var ret = new Process();
-            ret.StartInfo.FileName = tbExePath.Text;
-            ret.StartInfo.CreateNoWindow = true;
-            ret.StartInfo.UseShellExecute = false;
-            ret.StartInfo.Arguments = args;
-            ret.Start();
-
-            ret.WaitForExit();
-
-            return (ret.ExitCode == 0);
         }
 
     }
