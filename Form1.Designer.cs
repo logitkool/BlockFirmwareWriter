@@ -147,8 +147,8 @@
             // ファイルFToolStripMenuItem
             // 
             this.ファイルFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.終了XToolStripMenuItem,
-            this.avrdudeAToolStripMenuItem});
+            this.avrdudeAToolStripMenuItem,
+            this.終了XToolStripMenuItem});
             this.ファイルFToolStripMenuItem.Name = "ファイルFToolStripMenuItem";
             this.ファイルFToolStripMenuItem.Size = new System.Drawing.Size(77, 23);
             this.ファイルFToolStripMenuItem.Text = "ファイル(&F)";
