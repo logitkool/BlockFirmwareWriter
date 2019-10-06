@@ -175,6 +175,7 @@
             this.btnWriteRom.TabIndex = 17;
             this.btnWriteRom.Text = "[3] 設定 書き込み";
             this.btnWriteRom.UseVisualStyleBackColor = true;
+            this.btnWriteRom.Click += new System.EventHandler(this.BtnWriteRom_Click);
             // 
             // btnWriteHex
             // 
@@ -184,6 +185,7 @@
             this.btnWriteHex.TabIndex = 16;
             this.btnWriteHex.Text = "[2] HEX 書き込み";
             this.btnWriteHex.UseVisualStyleBackColor = true;
+            this.btnWriteHex.Click += new System.EventHandler(this.BtnWriteHex_Click);
             // 
             // btnWriteLfuse
             // 
@@ -243,6 +245,7 @@
             this.btnSelectHex.TabIndex = 9;
             this.btnSelectHex.Text = "参照";
             this.btnSelectHex.UseVisualStyleBackColor = true;
+            this.btnSelectHex.Click += new System.EventHandler(this.BtnSelectHex_Click);
             // 
             // tbHexPath
             // 

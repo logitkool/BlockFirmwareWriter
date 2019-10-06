@@ -13,6 +13,13 @@ namespace BlockFirmwareWriter
         {
             InitializeComponent();
 
+            // set role and mode combo box
+            comboRole.Items.AddRange(Enum.GetNames(typeof(FlocRole)));
+            comboRole.SelectedIndex = 0;
+            comboMode.Items.AddRange(Enum.GetNames(typeof(FlocMode)));
+            comboMode.SelectedIndex = 0;
+
+            // check existence of "avrdude with arduino" default path
             if (File.Exists(AVRDUDE_DEFAULT_PATH))
             {
                 tbExePath.Text = AVRDUDE_DEFAULT_PATH;
@@ -199,33 +206,45 @@ namespace BlockFirmwareWriter
             MessageBox.Show($"efuse: {fuses.ExtFuse,2:X}, hfuse: {fuses.HFuse,2:X}, lfuse: {fuses.LFuse,2:X}", this.Text);
             
         }
-    }
 
-    class ExecInfo
-    {
-        public ExecInfo(bool success, string stdout = null)
+        private void BtnSelectHex_Click(object sender, EventArgs e)
         {
-            Success = success;
-            StdOut = stdout;
+            var ofd = new OpenFileDialog();
+            ofd.Title = "HEXファイルを選択";
+            ofd.InitialDirectory = Environment.CurrentDirectory;
+            ofd.Filter = "IntelHEXファイル(*.hex)|*.hex";
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                tbHexPath.Text = ofd.FileName;
+            }
         }
 
-        public bool Success { get; }
-        public string StdOut { get; }
-    }
-
-    class FuseBit
-    {
-        public FuseBit(byte efuse, byte hfuse, byte lfuse)
+        private void BtnWriteHex_Click(object sender, EventArgs e)
         {
-            ExtFuse = efuse;
-            HFuse = hfuse;
-            LFuse = lfuse;
+            if (!File.Exists(tbHexPath.Text))
+            {
+                MessageBox.Show("ファームウェアファイルが存在しません。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            var args = $"-U flash:w:\"{tbHexPath.Text}\":i";
+            // TODO: 下部プログレスバーにアップロードの進捗を表示させる (#の数でも数える？)
+            if (Execute(args).Success)
+            {
+                MessageBox.Show("ファームウェアの書き込みに成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("ファームウェアの書き込みに失敗しました。接続や設定を確認してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        public byte ExtFuse { get; }
-        public byte HFuse { get; }
-        public byte LFuse { get; }
+        private void BtnWriteRom_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
 
+            // TODO: 実装 (Intel HEX形式を作り出したほうが楽かも？)
+        }
     }
 
 }
