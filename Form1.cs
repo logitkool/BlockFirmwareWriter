@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace BlockFirmwareWriter
 {
@@ -111,19 +112,22 @@ namespace BlockFirmwareWriter
                     return;
                 }
             }
+            if (checkIsWorking)
+            {
+                ret.StartInfo.UseShellExecute = false;
+                ret.StartInfo.RedirectStandardOutput = true;
+                ret.StartInfo.RedirectStandardError = true;
+            }
 
             ret.StartInfo.FileName = exePath;
             ret.StartInfo.Arguments = args;
-            ret.StartInfo.UseShellExecute = false;
-            ret.StartInfo.RedirectStandardOutput = true;
-            ret.StartInfo.RedirectStandardError = true;
             ret.Start();
 
             if (checkIsWorking)
             {
                 ret.WaitForExit();
                 string stderr = ret.StandardError.ReadToEnd();
-                
+
                 if (ret.ExitCode != 0)
                 {
                     // 期待されるエラーメッセージ (1行目)
@@ -135,12 +139,58 @@ namespace BlockFirmwareWriter
                         return;
                     }
                     MessageBox.Show("avrdudeの実行に失敗しました。設定を確認してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                } else
+                }
+                else
                 {
                     MessageBox.Show("avrdudeの実行に成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
 
         }
+
+        private void BtnWriteLfuse_Click(object sender, EventArgs e)
+        {
+            var args = @"-c usbasp -p t85";
+            Execute(outputDebug: true, openCmd: true, args: args);
+        }
+
+        private void ATtiny85テストAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (checkATtiny85Connection())
+            {
+                MessageBox.Show("ATtiny85への接続が成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("ATtiny85への接続が失敗しました。avrdudeのパスとUSBaspの接続等を確認してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private bool checkATtiny85Connection()
+        {
+            if (!File.Exists(tbExePath.Text))
+            {
+                return false;
+            }
+
+            var args = "-c usbasp -p t85";
+            if (File.Exists(tbConfPath.Text))
+            {
+                args += $" -C \"{tbConfPath.Text}\"";
+            }
+
+            var ret = new Process();
+            ret.StartInfo.FileName = tbExePath.Text;
+            ret.StartInfo.CreateNoWindow = true;
+            ret.StartInfo.UseShellExecute = false;
+            ret.StartInfo.Arguments = args;
+            ret.Start();
+
+            ret.WaitForExit();
+
+            return (ret.ExitCode == 0);
+        }
+
     }
 }

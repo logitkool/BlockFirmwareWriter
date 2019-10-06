@@ -63,6 +63,7 @@
             this.avrdudeAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.実行テストTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.単体実行EToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aTtiny85テストAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -293,6 +294,7 @@
             this.btnWriteLfuse.TabIndex = 15;
             this.btnWriteLfuse.Text = "[1] lfuse 書き込み";
             this.btnWriteLfuse.UseVisualStyleBackColor = true;
+            this.btnWriteLfuse.Click += new System.EventHandler(this.BtnWriteLfuse_Click);
             // 
             // btnWriteHex
             // 
@@ -367,7 +369,8 @@
             // 
             this.avrdudeAToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.単体実行EToolStripMenuItem,
-            this.実行テストTToolStripMenuItem});
+            this.実行テストTToolStripMenuItem,
+            this.aTtiny85テストAToolStripMenuItem});
             this.avrdudeAToolStripMenuItem.Name = "avrdudeAToolStripMenuItem";
             this.avrdudeAToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.avrdudeAToolStripMenuItem.Text = "Avrdude(&A)";
@@ -375,16 +378,23 @@
             // 実行テストTToolStripMenuItem
             // 
             this.実行テストTToolStripMenuItem.Name = "実行テストTToolStripMenuItem";
-            this.実行テストTToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.実行テストTToolStripMenuItem.Size = new System.Drawing.Size(182, 24);
             this.実行テストTToolStripMenuItem.Text = "実行テスト(&T)";
             this.実行テストTToolStripMenuItem.Click += new System.EventHandler(this.実行テストTToolStripMenuItem_Click);
             // 
             // 単体実行EToolStripMenuItem
             // 
             this.単体実行EToolStripMenuItem.Name = "単体実行EToolStripMenuItem";
-            this.単体実行EToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.単体実行EToolStripMenuItem.Size = new System.Drawing.Size(182, 24);
             this.単体実行EToolStripMenuItem.Text = "単体実行(&E)";
             this.単体実行EToolStripMenuItem.Click += new System.EventHandler(this.単体実行EToolStripMenuItem_Click);
+            // 
+            // aTtiny85テストAToolStripMenuItem
+            // 
+            this.aTtiny85テストAToolStripMenuItem.Name = "aTtiny85テストAToolStripMenuItem";
+            this.aTtiny85テストAToolStripMenuItem.Size = new System.Drawing.Size(182, 24);
+            this.aTtiny85テストAToolStripMenuItem.Text = "ATtiny85テスト(&A)";
+            this.aTtiny85テストAToolStripMenuItem.Click += new System.EventHandler(this.ATtiny85テストAToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -448,6 +458,7 @@
         private System.Windows.Forms.ToolStripMenuItem avrdudeAToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 実行テストTToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 単体実行EToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aTtiny85テストAToolStripMenuItem;
     }
 }
 
