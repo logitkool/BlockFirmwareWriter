@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace BlockFirmwareWriter
 {
@@ -96,12 +97,12 @@ namespace BlockFirmwareWriter
             p.Start();
         }
 
-        private bool Execute(string args = "", bool showMessage = false, bool checkOnlyExeWorks = false)
+        private ExecInfo Execute(string args = "", bool showMessage = false, bool checkOnlyExeWorks = false)
         {
             if (!File.Exists(tbExePath.Text))
             {
                 MessageBox.Show("avrdudeのパスを設定してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                return new ExecInfo(false);
             }
 
             if (!checkOnlyExeWorks)
@@ -122,6 +123,7 @@ namespace BlockFirmwareWriter
             p.StartInfo.Arguments = args;
             p.Start();
 
+            string stdout = p.StandardOutput.ReadToEnd();
             string stderr = p.StandardError.ReadToEnd();
             p.WaitForExit();
 
@@ -146,17 +148,24 @@ namespace BlockFirmwareWriter
                 }
             }
 
-            return ret;
+            return new ExecInfo(ret, stdout);
         }
 
         private void BtnWriteLfuse_Click(object sender, EventArgs e)
         {
-            
+            var args = "-B 3 -U lfuse:w:0xE2:m";
+            if (Execute(args).Success)
+            {
+                MessageBox.Show("フューズビットの書き込みに成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } else
+            {
+                MessageBox.Show("フューズビットの書き込みに失敗しました。接続を確認してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ATtiny85テストAToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Execute())
+            if (Execute("-B 3").Success)
             {
                 MessageBox.Show("ATtiny85への接続が成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -167,5 +176,56 @@ namespace BlockFirmwareWriter
 
         }
 
+        private FuseBit GetFuseBit()
+        {
+            if (!Execute("-B 3").Success) throw new InvalidOperationException();
+
+            var m = new Dictionary<string, byte>();
+
+            foreach(var name in new[] { "efuse", "hfuse", "lfuse" })
+            {
+                var ret = Execute($"-B 3 -U {name}:r:-:d -q -q");
+                if (!ret.Success || string.IsNullOrEmpty(ret.StdOut)) throw new InvalidOperationException();
+                m[name] = Convert.ToByte(ret.StdOut.Trim(), 10);
+            }
+
+            return new FuseBit(m["efuse"], m["hfuse"], m["lfuse"]);
+        }
+
+        private void FuseBit確認ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var fuses = GetFuseBit();
+
+            MessageBox.Show($"efuse: {fuses.ExtFuse,2:X}, hfuse: {fuses.HFuse,2:X}, lfuse: {fuses.LFuse,2:X}", this.Text);
+            
+        }
     }
+
+    class ExecInfo
+    {
+        public ExecInfo(bool success, string stdout = null)
+        {
+            Success = success;
+            StdOut = stdout;
+        }
+
+        public bool Success { get; }
+        public string StdOut { get; }
+    }
+
+    class FuseBit
+    {
+        public FuseBit(byte efuse, byte hfuse, byte lfuse)
+        {
+            ExtFuse = efuse;
+            HFuse = hfuse;
+            LFuse = lfuse;
+        }
+
+        public byte ExtFuse { get; }
+        public byte HFuse { get; }
+        public byte LFuse { get; }
+
+    }
+
 }

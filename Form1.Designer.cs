@@ -30,40 +30,42 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.ファイルFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tbExePath = new System.Windows.Forms.TextBox();
-            this.btnSelectExe = new System.Windows.Forms.Button();
-            this.btnSelectConf = new System.Windows.Forms.Button();
-            this.tbConfPath = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.comboMode = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.btnWriteRom = new System.Windows.Forms.Button();
+            this.btnWriteHex = new System.Windows.Forms.Button();
+            this.btnWriteLfuse = new System.Windows.Forms.Button();
+            this.comboRole = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.tbUidL = new System.Windows.Forms.TextBox();
+            this.tbUidH = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.btnSelectHex = new System.Windows.Forms.Button();
             this.tbHexPath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.tbUidH = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.tbUidL = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.comboRole = new System.Windows.Forms.ComboBox();
-            this.btnWriteLfuse = new System.Windows.Forms.Button();
-            this.btnWriteHex = new System.Windows.Forms.Button();
-            this.btnWriteRom = new System.Windows.Forms.Button();
-            this.comboMode = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnSelectConf = new System.Windows.Forms.Button();
+            this.tbConfPath = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnSelectExe = new System.Windows.Forms.Button();
+            this.tbExePath = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.ファイルFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.終了XToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.avrdudeAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.実行テストTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.単体実行EToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.実行テストTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aTtiny85ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aTtiny85テストAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fuseBit確認ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -80,6 +82,12 @@
             this.statusStrip1.Size = new System.Drawing.Size(460, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(200, 16);
+            this.toolStripProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
             // tabControl1
             // 
@@ -124,67 +132,142 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "動作/分岐/繰返";
             // 
-            // tabPage2
+            // label10
             // 
-            this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage2.Controls.Add(this.label8);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(452, 323);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "コア";
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(236, 232);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(13, 12);
+            this.label10.TabIndex = 21;
+            this.label10.Text = "L:";
             // 
-            // menuStrip1
+            // label9
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ファイルFToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(460, 27);
-            this.menuStrip1.TabIndex = 2;
-            this.menuStrip1.Text = "menuStrip1";
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(122, 232);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(15, 12);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "H:";
             // 
-            // ファイルFToolStripMenuItem
+            // comboMode
             // 
-            this.ファイルFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.avrdudeAToolStripMenuItem,
-            this.終了XToolStripMenuItem});
-            this.ファイルFToolStripMenuItem.Name = "ファイルFToolStripMenuItem";
-            this.ファイルFToolStripMenuItem.Size = new System.Drawing.Size(77, 23);
-            this.ファイルFToolStripMenuItem.Text = "ファイル(&F)";
+            this.comboMode.FormattingEnabled = true;
+            this.comboMode.Location = new System.Drawing.Point(124, 258);
+            this.comboMode.Name = "comboMode";
+            this.comboMode.Size = new System.Drawing.Size(121, 20);
+            this.comboMode.TabIndex = 19;
             // 
-            // toolStripProgressBar1
+            // label7
             // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(200, 16);
-            this.toolStripProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(19, 261);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(32, 12);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "Mode";
             // 
-            // label1
+            // btnWriteRom
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 21);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "avrdude";
+            this.btnWriteRom.Location = new System.Drawing.Point(124, 288);
+            this.btnWriteRom.Name = "btnWriteRom";
+            this.btnWriteRom.Size = new System.Drawing.Size(225, 23);
+            this.btnWriteRom.TabIndex = 17;
+            this.btnWriteRom.Text = "[3] 設定 書き込み";
+            this.btnWriteRom.UseVisualStyleBackColor = true;
             // 
-            // tbExePath
+            // btnWriteHex
             // 
-            this.tbExePath.Location = new System.Drawing.Point(124, 18);
-            this.tbExePath.Name = "tbExePath";
-            this.tbExePath.Size = new System.Drawing.Size(225, 19);
-            this.tbExePath.TabIndex = 1;
+            this.btnWriteHex.Location = new System.Drawing.Point(124, 166);
+            this.btnWriteHex.Name = "btnWriteHex";
+            this.btnWriteHex.Size = new System.Drawing.Size(225, 23);
+            this.btnWriteHex.TabIndex = 16;
+            this.btnWriteHex.Text = "[2] HEX 書き込み";
+            this.btnWriteHex.UseVisualStyleBackColor = true;
             // 
-            // btnSelectExe
+            // btnWriteLfuse
             // 
-            this.btnSelectExe.Location = new System.Drawing.Point(355, 16);
-            this.btnSelectExe.Name = "btnSelectExe";
-            this.btnSelectExe.Size = new System.Drawing.Size(75, 23);
-            this.btnSelectExe.TabIndex = 2;
-            this.btnSelectExe.Text = "参照";
-            this.btnSelectExe.UseVisualStyleBackColor = true;
-            this.btnSelectExe.Click += new System.EventHandler(this.BtnSelectExe_Click);
+            this.btnWriteLfuse.Location = new System.Drawing.Point(124, 98);
+            this.btnWriteLfuse.Name = "btnWriteLfuse";
+            this.btnWriteLfuse.Size = new System.Drawing.Size(225, 23);
+            this.btnWriteLfuse.TabIndex = 15;
+            this.btnWriteLfuse.Text = "[1] lfuse 書き込み";
+            this.btnWriteLfuse.UseVisualStyleBackColor = true;
+            this.btnWriteLfuse.Click += new System.EventHandler(this.BtnWriteLfuse_Click);
+            // 
+            // comboRole
+            // 
+            this.comboRole.FormattingEnabled = true;
+            this.comboRole.Location = new System.Drawing.Point(124, 199);
+            this.comboRole.Name = "comboRole";
+            this.comboRole.Size = new System.Drawing.Size(121, 20);
+            this.comboRole.TabIndex = 14;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(19, 232);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(24, 12);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "UID";
+            // 
+            // tbUidL
+            // 
+            this.tbUidL.Location = new System.Drawing.Point(255, 229);
+            this.tbUidL.Name = "tbUidL";
+            this.tbUidL.Size = new System.Drawing.Size(73, 19);
+            this.tbUidL.TabIndex = 12;
+            // 
+            // tbUidH
+            // 
+            this.tbUidH.Location = new System.Drawing.Point(143, 229);
+            this.tbUidH.Name = "tbUidH";
+            this.tbUidH.Size = new System.Drawing.Size(73, 19);
+            this.tbUidH.TabIndex = 11;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(19, 202);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(28, 12);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Role";
+            // 
+            // btnSelectHex
+            // 
+            this.btnSelectHex.Location = new System.Drawing.Point(355, 136);
+            this.btnSelectHex.Name = "btnSelectHex";
+            this.btnSelectHex.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectHex.TabIndex = 9;
+            this.btnSelectHex.Text = "参照";
+            this.btnSelectHex.UseVisualStyleBackColor = true;
+            // 
+            // tbHexPath
+            // 
+            this.tbHexPath.Location = new System.Drawing.Point(124, 138);
+            this.tbHexPath.Name = "tbHexPath";
+            this.tbHexPath.Size = new System.Drawing.Size(225, 19);
+            this.tbHexPath.TabIndex = 8;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(19, 141);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(47, 12);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "HEX file";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(122, 72);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(190, 12);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "※confがexeの位置に無い場合は選択";
             // 
             // btnSelectConf
             // 
@@ -212,124 +295,42 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "config file";
             // 
-            // label3
+            // btnSelectExe
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(122, 72);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(190, 12);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "※confがexeの位置に無い場合は選択";
+            this.btnSelectExe.Location = new System.Drawing.Point(355, 16);
+            this.btnSelectExe.Name = "btnSelectExe";
+            this.btnSelectExe.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectExe.TabIndex = 2;
+            this.btnSelectExe.Text = "参照";
+            this.btnSelectExe.UseVisualStyleBackColor = true;
+            this.btnSelectExe.Click += new System.EventHandler(this.BtnSelectExe_Click);
             // 
-            // btnSelectHex
+            // tbExePath
             // 
-            this.btnSelectHex.Location = new System.Drawing.Point(355, 136);
-            this.btnSelectHex.Name = "btnSelectHex";
-            this.btnSelectHex.Size = new System.Drawing.Size(75, 23);
-            this.btnSelectHex.TabIndex = 9;
-            this.btnSelectHex.Text = "参照";
-            this.btnSelectHex.UseVisualStyleBackColor = true;
+            this.tbExePath.Location = new System.Drawing.Point(124, 18);
+            this.tbExePath.Name = "tbExePath";
+            this.tbExePath.Size = new System.Drawing.Size(225, 19);
+            this.tbExePath.TabIndex = 1;
             // 
-            // tbHexPath
+            // label1
             // 
-            this.tbHexPath.Location = new System.Drawing.Point(124, 138);
-            this.tbHexPath.Name = "tbHexPath";
-            this.tbHexPath.Size = new System.Drawing.Size(225, 19);
-            this.tbHexPath.TabIndex = 8;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(19, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 12);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "avrdude";
             // 
-            // label4
+            // tabPage2
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(19, 141);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(47, 12);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "HEX file";
-            // 
-            // tbUidH
-            // 
-            this.tbUidH.Location = new System.Drawing.Point(143, 229);
-            this.tbUidH.Name = "tbUidH";
-            this.tbUidH.Size = new System.Drawing.Size(73, 19);
-            this.tbUidH.TabIndex = 11;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(19, 202);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(28, 12);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Role";
-            // 
-            // tbUidL
-            // 
-            this.tbUidL.Location = new System.Drawing.Point(255, 229);
-            this.tbUidL.Name = "tbUidL";
-            this.tbUidL.Size = new System.Drawing.Size(73, 19);
-            this.tbUidL.TabIndex = 12;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(19, 232);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(24, 12);
-            this.label6.TabIndex = 13;
-            this.label6.Text = "UID";
-            // 
-            // comboRole
-            // 
-            this.comboRole.FormattingEnabled = true;
-            this.comboRole.Location = new System.Drawing.Point(124, 199);
-            this.comboRole.Name = "comboRole";
-            this.comboRole.Size = new System.Drawing.Size(121, 20);
-            this.comboRole.TabIndex = 14;
-            // 
-            // btnWriteLfuse
-            // 
-            this.btnWriteLfuse.Location = new System.Drawing.Point(124, 98);
-            this.btnWriteLfuse.Name = "btnWriteLfuse";
-            this.btnWriteLfuse.Size = new System.Drawing.Size(225, 23);
-            this.btnWriteLfuse.TabIndex = 15;
-            this.btnWriteLfuse.Text = "[1] lfuse 書き込み";
-            this.btnWriteLfuse.UseVisualStyleBackColor = true;
-            this.btnWriteLfuse.Click += new System.EventHandler(this.BtnWriteLfuse_Click);
-            // 
-            // btnWriteHex
-            // 
-            this.btnWriteHex.Location = new System.Drawing.Point(124, 166);
-            this.btnWriteHex.Name = "btnWriteHex";
-            this.btnWriteHex.Size = new System.Drawing.Size(225, 23);
-            this.btnWriteHex.TabIndex = 16;
-            this.btnWriteHex.Text = "[2] HEX 書き込み";
-            this.btnWriteHex.UseVisualStyleBackColor = true;
-            // 
-            // btnWriteRom
-            // 
-            this.btnWriteRom.Location = new System.Drawing.Point(124, 288);
-            this.btnWriteRom.Name = "btnWriteRom";
-            this.btnWriteRom.Size = new System.Drawing.Size(225, 23);
-            this.btnWriteRom.TabIndex = 17;
-            this.btnWriteRom.Text = "[3] 設定 書き込み";
-            this.btnWriteRom.UseVisualStyleBackColor = true;
-            // 
-            // comboMode
-            // 
-            this.comboMode.FormattingEnabled = true;
-            this.comboMode.Location = new System.Drawing.Point(124, 258);
-            this.comboMode.Name = "comboMode";
-            this.comboMode.Size = new System.Drawing.Size(121, 20);
-            this.comboMode.TabIndex = 19;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(19, 261);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(32, 12);
-            this.label7.TabIndex = 18;
-            this.label7.Text = "Mode";
+            this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage2.Controls.Add(this.label8);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(452, 323);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "コア";
             // 
             // label8
             // 
@@ -340,23 +341,25 @@
             this.label8.TabIndex = 0;
             this.label8.Text = "WIP";
             // 
-            // label9
+            // menuStrip1
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(122, 232);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(15, 12);
-            this.label9.TabIndex = 20;
-            this.label9.Text = "H:";
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ファイルFToolStripMenuItem,
+            this.avrdudeAToolStripMenuItem,
+            this.aTtiny85ToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(460, 27);
+            this.menuStrip1.TabIndex = 2;
+            this.menuStrip1.Text = "menuStrip1";
             // 
-            // label10
+            // ファイルFToolStripMenuItem
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(236, 232);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(13, 12);
-            this.label10.TabIndex = 21;
-            this.label10.Text = "L:";
+            this.ファイルFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.終了XToolStripMenuItem});
+            this.ファイルFToolStripMenuItem.Name = "ファイルFToolStripMenuItem";
+            this.ファイルFToolStripMenuItem.Size = new System.Drawing.Size(77, 23);
+            this.ファイルFToolStripMenuItem.Text = "ファイル(&F)";
             // 
             // 終了XToolStripMenuItem
             // 
@@ -369,32 +372,47 @@
             // 
             this.avrdudeAToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.単体実行EToolStripMenuItem,
-            this.実行テストTToolStripMenuItem,
-            this.aTtiny85テストAToolStripMenuItem});
+            this.実行テストTToolStripMenuItem});
             this.avrdudeAToolStripMenuItem.Name = "avrdudeAToolStripMenuItem";
-            this.avrdudeAToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.avrdudeAToolStripMenuItem.Size = new System.Drawing.Size(90, 23);
             this.avrdudeAToolStripMenuItem.Text = "Avrdude(&A)";
-            // 
-            // 実行テストTToolStripMenuItem
-            // 
-            this.実行テストTToolStripMenuItem.Name = "実行テストTToolStripMenuItem";
-            this.実行テストTToolStripMenuItem.Size = new System.Drawing.Size(182, 24);
-            this.実行テストTToolStripMenuItem.Text = "実行テスト(&T)";
-            this.実行テストTToolStripMenuItem.Click += new System.EventHandler(this.実行テストTToolStripMenuItem_Click);
             // 
             // 単体実行EToolStripMenuItem
             // 
             this.単体実行EToolStripMenuItem.Name = "単体実行EToolStripMenuItem";
-            this.単体実行EToolStripMenuItem.Size = new System.Drawing.Size(182, 24);
+            this.単体実行EToolStripMenuItem.Size = new System.Drawing.Size(153, 24);
             this.単体実行EToolStripMenuItem.Text = "単体実行(&E)";
             this.単体実行EToolStripMenuItem.Click += new System.EventHandler(this.単体実行EToolStripMenuItem_Click);
+            // 
+            // 実行テストTToolStripMenuItem
+            // 
+            this.実行テストTToolStripMenuItem.Name = "実行テストTToolStripMenuItem";
+            this.実行テストTToolStripMenuItem.Size = new System.Drawing.Size(153, 24);
+            this.実行テストTToolStripMenuItem.Text = "実行テスト(&T)";
+            this.実行テストTToolStripMenuItem.Click += new System.EventHandler(this.実行テストTToolStripMenuItem_Click);
+            // 
+            // aTtiny85ToolStripMenuItem
+            // 
+            this.aTtiny85ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aTtiny85テストAToolStripMenuItem,
+            this.fuseBit確認ToolStripMenuItem});
+            this.aTtiny85ToolStripMenuItem.Name = "aTtiny85ToolStripMenuItem";
+            this.aTtiny85ToolStripMenuItem.Size = new System.Drawing.Size(91, 23);
+            this.aTtiny85ToolStripMenuItem.Text = "ATtiny85(&T)";
             // 
             // aTtiny85テストAToolStripMenuItem
             // 
             this.aTtiny85テストAToolStripMenuItem.Name = "aTtiny85テストAToolStripMenuItem";
-            this.aTtiny85テストAToolStripMenuItem.Size = new System.Drawing.Size(182, 24);
-            this.aTtiny85テストAToolStripMenuItem.Text = "ATtiny85テスト(&A)";
+            this.aTtiny85テストAToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.aTtiny85テストAToolStripMenuItem.Text = "ATtiny85テスト(&T)";
             this.aTtiny85テストAToolStripMenuItem.Click += new System.EventHandler(this.ATtiny85テストAToolStripMenuItem_Click);
+            // 
+            // fuseBit確認ToolStripMenuItem
+            // 
+            this.fuseBit確認ToolStripMenuItem.Name = "fuseBit確認ToolStripMenuItem";
+            this.fuseBit確認ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.fuseBit確認ToolStripMenuItem.Text = "Fuse bit 確認(&F)";
+            this.fuseBit確認ToolStripMenuItem.Click += new System.EventHandler(this.FuseBit確認ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -404,8 +422,10 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "BlockFirmwareWriter";
             this.statusStrip1.ResumeLayout(false);
@@ -456,9 +476,11 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ToolStripMenuItem 終了XToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem avrdudeAToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 実行テストTToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 単体実行EToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 実行テストTToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aTtiny85ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aTtiny85テストAToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fuseBit確認ToolStripMenuItem;
     }
 }
 
