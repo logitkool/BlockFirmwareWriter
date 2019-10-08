@@ -56,7 +56,6 @@
             this.tbExePath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label8 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ファイルFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.終了XToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,6 +65,16 @@
             this.aTtiny85ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aTtiny85テストAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fuseBit確認ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.設定確認SToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSelectToolPath = new System.Windows.Forms.Button();
+            this.tbEsptoolPath = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.btnSelectBinPath = new System.Windows.Forms.Button();
+            this.tbBinPath = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.btnWriteCore = new System.Windows.Forms.Button();
+            this.comboCOM = new System.Windows.Forms.ComboBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -327,6 +336,14 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage2.Controls.Add(this.comboCOM);
+            this.tabPage2.Controls.Add(this.label12);
+            this.tabPage2.Controls.Add(this.btnWriteCore);
+            this.tabPage2.Controls.Add(this.btnSelectBinPath);
+            this.tabPage2.Controls.Add(this.tbBinPath);
+            this.tabPage2.Controls.Add(this.label11);
+            this.tabPage2.Controls.Add(this.btnSelectToolPath);
+            this.tabPage2.Controls.Add(this.tbEsptoolPath);
             this.tabPage2.Controls.Add(this.label8);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -334,15 +351,6 @@
             this.tabPage2.Size = new System.Drawing.Size(452, 323);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "コア";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(21, 19);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(24, 12);
-            this.label8.TabIndex = 0;
-            this.label8.Text = "WIP";
             // 
             // menuStrip1
             // 
@@ -367,7 +375,7 @@
             // 終了XToolStripMenuItem
             // 
             this.終了XToolStripMenuItem.Name = "終了XToolStripMenuItem";
-            this.終了XToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.終了XToolStripMenuItem.Size = new System.Drawing.Size(122, 24);
             this.終了XToolStripMenuItem.Text = "終了(&X)";
             this.終了XToolStripMenuItem.Click += new System.EventHandler(this.終了XToolStripMenuItem_Click);
             // 
@@ -398,7 +406,8 @@
             // 
             this.aTtiny85ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aTtiny85テストAToolStripMenuItem,
-            this.fuseBit確認ToolStripMenuItem});
+            this.fuseBit確認ToolStripMenuItem,
+            this.設定確認SToolStripMenuItem});
             this.aTtiny85ToolStripMenuItem.Name = "aTtiny85ToolStripMenuItem";
             this.aTtiny85ToolStripMenuItem.Size = new System.Drawing.Size(91, 23);
             this.aTtiny85ToolStripMenuItem.Text = "ATtiny85(&T)";
@@ -416,6 +425,92 @@
             this.fuseBit確認ToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
             this.fuseBit確認ToolStripMenuItem.Text = "Fuse bit 確認(&F)";
             this.fuseBit確認ToolStripMenuItem.Click += new System.EventHandler(this.FuseBit確認ToolStripMenuItem_Click);
+            // 
+            // 設定確認SToolStripMenuItem
+            // 
+            this.設定確認SToolStripMenuItem.Name = "設定確認SToolStripMenuItem";
+            this.設定確認SToolStripMenuItem.Size = new System.Drawing.Size(180, 24);
+            this.設定確認SToolStripMenuItem.Text = "設定確認(&S)";
+            this.設定確認SToolStripMenuItem.Click += new System.EventHandler(this.設定確認SToolStripMenuItem_Click);
+            // 
+            // btnSelectToolPath
+            // 
+            this.btnSelectToolPath.Location = new System.Drawing.Point(356, 20);
+            this.btnSelectToolPath.Name = "btnSelectToolPath";
+            this.btnSelectToolPath.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectToolPath.TabIndex = 5;
+            this.btnSelectToolPath.Text = "参照";
+            this.btnSelectToolPath.UseVisualStyleBackColor = true;
+            this.btnSelectToolPath.Click += new System.EventHandler(this.BtnSelectToolPath_Click);
+            // 
+            // tbEsptoolPath
+            // 
+            this.tbEsptoolPath.Location = new System.Drawing.Point(125, 22);
+            this.tbEsptoolPath.Name = "tbEsptoolPath";
+            this.tbEsptoolPath.Size = new System.Drawing.Size(225, 19);
+            this.tbEsptoolPath.TabIndex = 4;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(20, 25);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(62, 12);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "esptool.exe";
+            // 
+            // btnSelectBinPath
+            // 
+            this.btnSelectBinPath.Location = new System.Drawing.Point(356, 58);
+            this.btnSelectBinPath.Name = "btnSelectBinPath";
+            this.btnSelectBinPath.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectBinPath.TabIndex = 8;
+            this.btnSelectBinPath.Text = "参照";
+            this.btnSelectBinPath.UseVisualStyleBackColor = true;
+            this.btnSelectBinPath.Click += new System.EventHandler(this.BtnSelectBinPath_Click);
+            // 
+            // tbBinPath
+            // 
+            this.tbBinPath.Location = new System.Drawing.Point(125, 60);
+            this.tbBinPath.Name = "tbBinPath";
+            this.tbBinPath.Size = new System.Drawing.Size(225, 19);
+            this.tbBinPath.TabIndex = 7;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(20, 63);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(20, 12);
+            this.label11.TabIndex = 6;
+            this.label11.Text = "bin";
+            // 
+            // btnWriteCore
+            // 
+            this.btnWriteCore.Location = new System.Drawing.Point(125, 139);
+            this.btnWriteCore.Name = "btnWriteCore";
+            this.btnWriteCore.Size = new System.Drawing.Size(225, 23);
+            this.btnWriteCore.TabIndex = 16;
+            this.btnWriteCore.Text = "ファームウェア書き込み";
+            this.btnWriteCore.UseVisualStyleBackColor = true;
+            this.btnWriteCore.Click += new System.EventHandler(this.BtnWriteCore_Click);
+            // 
+            // comboCOM
+            // 
+            this.comboCOM.FormattingEnabled = true;
+            this.comboCOM.Location = new System.Drawing.Point(125, 98);
+            this.comboCOM.Name = "comboCOM";
+            this.comboCOM.Size = new System.Drawing.Size(121, 20);
+            this.comboCOM.TabIndex = 18;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(20, 101);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(30, 12);
+            this.label12.TabIndex = 17;
+            this.label12.Text = "COM";
             // 
             // Form1
             // 
@@ -474,7 +569,6 @@
         private System.Windows.Forms.TextBox tbUidL;
         private System.Windows.Forms.TextBox tbUidH;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ToolStripMenuItem 終了XToolStripMenuItem;
@@ -484,6 +578,16 @@
         private System.Windows.Forms.ToolStripMenuItem aTtiny85ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aTtiny85テストAToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fuseBit確認ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 設定確認SToolStripMenuItem;
+        private System.Windows.Forms.Button btnWriteCore;
+        private System.Windows.Forms.Button btnSelectBinPath;
+        private System.Windows.Forms.TextBox tbBinPath;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button btnSelectToolPath;
+        private System.Windows.Forms.TextBox tbEsptoolPath;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox comboCOM;
+        private System.Windows.Forms.Label label12;
     }
 }
 

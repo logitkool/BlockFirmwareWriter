@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO.Ports;
 
 namespace BlockFirmwareWriter
 {
@@ -29,6 +30,28 @@ namespace BlockFirmwareWriter
             {
                 tbConfPath.Text = AVRDUDE_DEFAULT_CONF_PATH;
             }
+
+            // check existence of esptool.exe
+            var documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (File.Exists(documentPath + @"\Arduino\hardware\espressif\esp32\tools\esptool.exe"))
+            {
+                tbEsptoolPath.Text = documentPath + @"\Arduino\hardware\espressif\esp32\tools\esptool.exe";
+            }
+            var apppath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            if (File.Exists(apppath + @"\Arduino15\packages\esp32\tools\esptool_py\2.6.1\esptool.exe"))
+            {
+                tbEsptoolPath.Text = apppath + @"\Arduino15\packages\esp32\tools\esptool_py\2.6.1\esptool.exe";
+            }
+
+            // get com ports
+            string[] ports = SerialPort.GetPortNames();
+            foreach (string port in ports)
+            {
+                comboCOM.Items.Add(port);
+            }
+            if (comboCOM.Items.Count > 0)
+                comboCOM.SelectedIndex = 0;
+
         }
 
         private const string AVRDUDE_DEFAULT_PATH = @"C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\avrdude.exe"; // arduino
@@ -158,13 +181,37 @@ namespace BlockFirmwareWriter
             return new ExecInfo(ret, stdout);
         }
 
+        private bool ExecuteEspTool()
+        {
+            if (!File.Exists(tbEsptoolPath.Text))
+            {
+                MessageBox.Show("esptool.exeのパスを設定してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (!File.Exists(tbBinPath.Text))
+            {
+                MessageBox.Show(".binファイルのパスを設定してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            var p = new Process();
+            p.StartInfo.FileName = tbEsptoolPath.Text;
+            p.StartInfo.Arguments = $"-c esp32 -p {comboCOM.SelectedItem.ToString()} -b 115200 write_flash 0x100000 ${tbBinPath.Text}";
+            p.Start();
+
+            p.WaitForExit();
+
+            return p.ExitCode == 0;
+        }
+
         private void BtnWriteLfuse_Click(object sender, EventArgs e)
         {
             var args = "-B 3 -U lfuse:w:0xE2:m";
             if (Execute(args).Success)
             {
                 MessageBox.Show("フューズビットの書き込みに成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } else
+            }
+            else
             {
                 MessageBox.Show("フューズビットの書き込みに失敗しました。接続を確認してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -189,7 +236,7 @@ namespace BlockFirmwareWriter
 
             var m = new Dictionary<string, byte>();
 
-            foreach(var name in new[] { "efuse", "hfuse", "lfuse" })
+            foreach (var name in new[] { "efuse", "hfuse", "lfuse" })
             {
                 var ret = Execute($"-B 3 -U {name}:r:-:d -q -q");
                 if (!ret.Success || string.IsNullOrEmpty(ret.StdOut)) throw new InvalidOperationException();
@@ -204,7 +251,7 @@ namespace BlockFirmwareWriter
             var fuses = GetFuseBit();
 
             MessageBox.Show($"efuse: {fuses.ExtFuse,2:X}, hfuse: {fuses.HFuse,2:X}, lfuse: {fuses.LFuse,2:X}", this.Text);
-            
+
         }
 
         private void BtnSelectHex_Click(object sender, EventArgs e)
@@ -228,7 +275,6 @@ namespace BlockFirmwareWriter
             }
 
             var args = $"-U flash:w:\"{tbHexPath.Text}\":i";
-            // TODO: 下部プログレスバーにアップロードの進捗を表示させる (#の数でも数える？)
             if (Execute(args).Success)
             {
                 MessageBox.Show("ファームウェアの書き込みに成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -239,11 +285,129 @@ namespace BlockFirmwareWriter
             }
         }
 
+        private void GetRom()
+        {
+            if (!Execute("-B 3").Success) throw new InvalidOperationException();
+
+            var ret = Execute("-U eeprom:r:-:i -q -q");
+            if ((!ret.Success) || (ret.StdOut.Split('\n').Length < 1))
+            {
+                MessageBox.Show("EEPROMの読み込みに失敗しました。。接続や設定を確認してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // :(start_code), byte count, address, record_type => 9 chars
+            // flag (FF) role uidH uidL (FF) mode => 7 bytes * 2 chars = 14 chars
+            // no checksum check
+            var intel_hex_data = ret.StdOut.Split('\n')[0];
+            var sep_hex = intel_hex_data.Skip(9).Take(14)
+                .Select((v, i) => new { v, i }).GroupBy(x => x.i / 2).Select(g => g.Select(x => x.v))
+                .Select(h => string.Concat(h))
+                .ToArray();
+
+            bool saved = Convert.ToByte(sep_hex[0], 16) == 0x01;
+            byte role = Convert.ToByte(sep_hex[2], 16);
+            byte uid_h = Convert.ToByte(sep_hex[3], 16);
+            byte uid_l = Convert.ToByte(sep_hex[4], 16);
+            byte mode = Convert.ToByte(sep_hex[6], 16);
+
+            var msg = "Saved: " + (saved ? "true" : "false") + "\n";
+            var _role = (FlocRole)Enum.ToObject(typeof(FlocRole), role);
+            msg += "Role: " + Enum.GetName(typeof(FlocRole), _role) + "\n";
+            msg += $"UID: {uid_h,2:X}.{uid_l,2:X}\n";
+            var _mode = (FlocMode)Enum.ToObject(typeof(FlocMode), mode);
+            msg += "Mode: " + Enum.GetName(typeof(FlocMode), _mode);
+
+            comboRole.SelectedIndex = comboRole.Items.IndexOf(Enum.GetName(typeof(FlocRole), _role));
+            comboMode.SelectedIndex = comboMode.Items.IndexOf(Enum.GetName(typeof(FlocMode), _mode));
+            tbUidH.Text = $"{uid_h,2:X}";
+            tbUidL.Text = $"{uid_l,2:X}";
+
+            MessageBox.Show(msg, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void BtnWriteRom_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(tbUidH.Text) || string.IsNullOrEmpty(tbUidL.Text))
+            {
+                MessageBox.Show("UIDの設定が適切ではありません。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-            // TODO: 実装 (Intel HEX形式を作り出したほうが楽かも？)
+            var role = (byte)(Enum.Parse(typeof(FlocRole), comboRole.SelectedItem.ToString()));
+            var mode = (byte)(Enum.Parse(typeof(FlocMode), comboMode.SelectedItem.ToString()));
+            var uid_h = Convert.ToByte(tbUidH.Text, 16);
+            var uid_l = Convert.ToByte(tbUidL.Text, 16);
+
+            var msg = "この情報を登録します。よろしいですか？\n";
+            msg += "Role: " + comboRole.SelectedItem.ToString() + "\n";
+            msg += $"UID: {uid_h,2:X}.{uid_l,2:X}\n";
+            msg += "Mode: " + comboMode.SelectedItem.ToString();
+
+            var ret = MessageBox.Show(msg, this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (ret == DialogResult.Yes)
+            {
+                var intel_hex_data = ":0700000001FF";
+                intel_hex_data += $"{role:X2}{uid_h:X2}{uid_l:X2}FF{mode:X2}";
+                var sum = 0x07 + 0x01 + 0xFF + role + uid_h + uid_l + 0xFF + mode;
+                intel_hex_data += $"{(byte)(~sum + 1):X2}";
+
+                if (Execute($"-U eeprom:w:{intel_hex_data}:i").Success)
+                {
+                    MessageBox.Show("EEPROMへの書き込みに成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("EEPROMへの書き込みに失敗しました。接続や設定を確認してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+        }
+
+        private void 設定確認SToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GetRom();
+        }
+
+        private void BtnSelectToolPath_Click(object sender, EventArgs e)
+        {
+            var apppath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var ofd = new OpenFileDialog();
+            ofd.Title = "esptool.exeを選択";
+            ofd.FileName = "esptool.exe";
+            ofd.InitialDirectory = apppath + @"\Arduino15\packages\esp32\tools\esptool_py\2.6.1\esptool.exe";
+            ofd.Filter = "実行可能ファイル(*.exe)|*.exe";
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                tbEsptoolPath.Text = ofd.FileName;
+            }
+        }
+
+        private void BtnSelectBinPath_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog();
+            ofd.Title = "ファームウェアバイナリデータを選択";
+            ofd.InitialDirectory = Environment.CurrentDirectory;
+            ofd.Filter = "バイナリファイル(*.bin)|*.bin";
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                tbBinPath.Text = ofd.FileName;
+            }
+        }
+
+        private void BtnWriteCore_Click(object sender, EventArgs e)
+        {
+            if (ExecuteEspTool())
+            {
+                MessageBox.Show("ファームウェアの書き込みに成功しました。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("ファームウェアの書き込みに失敗しました。接続や設定を確認してください。", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 
