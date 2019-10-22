@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label10 = new System.Windows.Forms.Label();
@@ -56,6 +55,15 @@
             this.tbExePath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.comboCOM = new System.Windows.Forms.ComboBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.btnWriteCore = new System.Windows.Forms.Button();
+            this.btnSelectBinPath = new System.Windows.Forms.Button();
+            this.tbBinPath = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.btnSelectToolPath = new System.Windows.Forms.Button();
+            this.tbEsptoolPath = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ファイルFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.終了XToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,16 +74,6 @@
             this.aTtiny85テストAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fuseBit確認ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.設定確認SToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnSelectToolPath = new System.Windows.Forms.Button();
-            this.tbEsptoolPath = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.btnSelectBinPath = new System.Windows.Forms.Button();
-            this.tbBinPath = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.btnWriteCore = new System.Windows.Forms.Button();
-            this.comboCOM = new System.Windows.Forms.ComboBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -84,19 +82,11 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripProgressBar1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 376);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(460, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripProgressBar1
-            // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(200, 16);
-            this.toolStripProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
             // tabControl1
             // 
@@ -258,10 +248,13 @@
             // 
             // tbHexPath
             // 
+            this.tbHexPath.AllowDrop = true;
             this.tbHexPath.Location = new System.Drawing.Point(124, 138);
             this.tbHexPath.Name = "tbHexPath";
             this.tbHexPath.Size = new System.Drawing.Size(225, 19);
             this.tbHexPath.TabIndex = 8;
+            this.tbHexPath.DragDrop += new System.Windows.Forms.DragEventHandler(this.TbFilePath_DragDrop);
+            this.tbHexPath.DragEnter += new System.Windows.Forms.DragEventHandler(this.TbFilePath_DragEnter);
             // 
             // label4
             // 
@@ -352,6 +345,88 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "コア";
             // 
+            // comboCOM
+            // 
+            this.comboCOM.FormattingEnabled = true;
+            this.comboCOM.Location = new System.Drawing.Point(125, 98);
+            this.comboCOM.Name = "comboCOM";
+            this.comboCOM.Size = new System.Drawing.Size(121, 20);
+            this.comboCOM.TabIndex = 18;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(20, 101);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(30, 12);
+            this.label12.TabIndex = 17;
+            this.label12.Text = "COM";
+            // 
+            // btnWriteCore
+            // 
+            this.btnWriteCore.Location = new System.Drawing.Point(125, 139);
+            this.btnWriteCore.Name = "btnWriteCore";
+            this.btnWriteCore.Size = new System.Drawing.Size(225, 23);
+            this.btnWriteCore.TabIndex = 16;
+            this.btnWriteCore.Text = "ファームウェア書き込み";
+            this.btnWriteCore.UseVisualStyleBackColor = true;
+            this.btnWriteCore.Click += new System.EventHandler(this.BtnWriteCore_Click);
+            // 
+            // btnSelectBinPath
+            // 
+            this.btnSelectBinPath.Location = new System.Drawing.Point(356, 58);
+            this.btnSelectBinPath.Name = "btnSelectBinPath";
+            this.btnSelectBinPath.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectBinPath.TabIndex = 8;
+            this.btnSelectBinPath.Text = "参照";
+            this.btnSelectBinPath.UseVisualStyleBackColor = true;
+            this.btnSelectBinPath.Click += new System.EventHandler(this.BtnSelectBinPath_Click);
+            // 
+            // tbBinPath
+            // 
+            this.tbBinPath.AllowDrop = true;
+            this.tbBinPath.Location = new System.Drawing.Point(125, 60);
+            this.tbBinPath.Name = "tbBinPath";
+            this.tbBinPath.Size = new System.Drawing.Size(225, 19);
+            this.tbBinPath.TabIndex = 7;
+            this.tbBinPath.DragDrop += new System.Windows.Forms.DragEventHandler(this.TbFilePath_DragDrop);
+            this.tbBinPath.DragEnter += new System.Windows.Forms.DragEventHandler(this.TbFilePath_DragEnter);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(20, 63);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(99, 12);
+            this.label11.TabIndex = 6;
+            this.label11.Text = "ファームウェアファイル";
+            // 
+            // btnSelectToolPath
+            // 
+            this.btnSelectToolPath.Location = new System.Drawing.Point(356, 20);
+            this.btnSelectToolPath.Name = "btnSelectToolPath";
+            this.btnSelectToolPath.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectToolPath.TabIndex = 5;
+            this.btnSelectToolPath.Text = "参照";
+            this.btnSelectToolPath.UseVisualStyleBackColor = true;
+            this.btnSelectToolPath.Click += new System.EventHandler(this.BtnSelectToolPath_Click);
+            // 
+            // tbEsptoolPath
+            // 
+            this.tbEsptoolPath.Location = new System.Drawing.Point(125, 22);
+            this.tbEsptoolPath.Name = "tbEsptoolPath";
+            this.tbEsptoolPath.Size = new System.Drawing.Size(225, 19);
+            this.tbEsptoolPath.TabIndex = 4;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(20, 25);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(62, 12);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "esptool.exe";
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -433,85 +508,6 @@
             this.設定確認SToolStripMenuItem.Text = "設定確認(&S)";
             this.設定確認SToolStripMenuItem.Click += new System.EventHandler(this.設定確認SToolStripMenuItem_Click);
             // 
-            // btnSelectToolPath
-            // 
-            this.btnSelectToolPath.Location = new System.Drawing.Point(356, 20);
-            this.btnSelectToolPath.Name = "btnSelectToolPath";
-            this.btnSelectToolPath.Size = new System.Drawing.Size(75, 23);
-            this.btnSelectToolPath.TabIndex = 5;
-            this.btnSelectToolPath.Text = "参照";
-            this.btnSelectToolPath.UseVisualStyleBackColor = true;
-            this.btnSelectToolPath.Click += new System.EventHandler(this.BtnSelectToolPath_Click);
-            // 
-            // tbEsptoolPath
-            // 
-            this.tbEsptoolPath.Location = new System.Drawing.Point(125, 22);
-            this.tbEsptoolPath.Name = "tbEsptoolPath";
-            this.tbEsptoolPath.Size = new System.Drawing.Size(225, 19);
-            this.tbEsptoolPath.TabIndex = 4;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(20, 25);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(62, 12);
-            this.label8.TabIndex = 3;
-            this.label8.Text = "esptool.exe";
-            // 
-            // btnSelectBinPath
-            // 
-            this.btnSelectBinPath.Location = new System.Drawing.Point(356, 58);
-            this.btnSelectBinPath.Name = "btnSelectBinPath";
-            this.btnSelectBinPath.Size = new System.Drawing.Size(75, 23);
-            this.btnSelectBinPath.TabIndex = 8;
-            this.btnSelectBinPath.Text = "参照";
-            this.btnSelectBinPath.UseVisualStyleBackColor = true;
-            this.btnSelectBinPath.Click += new System.EventHandler(this.BtnSelectBinPath_Click);
-            // 
-            // tbBinPath
-            // 
-            this.tbBinPath.Location = new System.Drawing.Point(125, 60);
-            this.tbBinPath.Name = "tbBinPath";
-            this.tbBinPath.Size = new System.Drawing.Size(225, 19);
-            this.tbBinPath.TabIndex = 7;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(20, 63);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(20, 12);
-            this.label11.TabIndex = 6;
-            this.label11.Text = "bin";
-            // 
-            // btnWriteCore
-            // 
-            this.btnWriteCore.Location = new System.Drawing.Point(125, 139);
-            this.btnWriteCore.Name = "btnWriteCore";
-            this.btnWriteCore.Size = new System.Drawing.Size(225, 23);
-            this.btnWriteCore.TabIndex = 16;
-            this.btnWriteCore.Text = "ファームウェア書き込み";
-            this.btnWriteCore.UseVisualStyleBackColor = true;
-            this.btnWriteCore.Click += new System.EventHandler(this.BtnWriteCore_Click);
-            // 
-            // comboCOM
-            // 
-            this.comboCOM.FormattingEnabled = true;
-            this.comboCOM.Location = new System.Drawing.Point(125, 98);
-            this.comboCOM.Name = "comboCOM";
-            this.comboCOM.Size = new System.Drawing.Size(121, 20);
-            this.comboCOM.TabIndex = 18;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(20, 101);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(30, 12);
-            this.label12.TabIndex = 17;
-            this.label12.Text = "COM";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -526,8 +522,6 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "BlockFirmwareWriter";
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -548,7 +542,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ファイルFToolStripMenuItem;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSelectConf;
         private System.Windows.Forms.TextBox tbConfPath;
